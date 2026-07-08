@@ -110,7 +110,8 @@ function App() {
     setCargando(true)
 
     try {
-      const respuesta = await axios.get(`http://127.0.0.1:8000/leyes/buscar?q=${textoFinal}`)
+      // 📡 CONECTADO AL CEREBRO REAL EN LA NUBE DE RENDER
+      const respuesta = await axios.get(`https://ia-legal-transito-app.onrender.com/leyes/buscar?q=${textoFinal}`)
       const datos = respuesta.data.datos || []
       const textoGemini = respuesta.data.respuesta_ia
 
