@@ -1,7 +1,11 @@
 import mysql.connector
 import sys
 import os
-from dotenv import load_config # Asegúrate de tener load_dotenv() al inicio de tu proyecto principal
+# 🛠️ CORRECCIÓN: Cambiado load_config por load_dotenv de forma correcta
+from dotenv import load_dotenv
+
+# 🔒 Cargamos las variables de entorno para que os.getenv funcione perfectamente
+load_dotenv()
 
 def conectar_db():
     try:

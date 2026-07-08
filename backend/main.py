@@ -21,7 +21,11 @@ app.add_middleware(
 
 # 🔒 PROTEGIDO: Jalamos la API Key de forma segura desde las variables de entorno
 api_key_gemini = os.getenv("GEMINI_API_KEY")
-client = genai.Client(api_key=api_key_gemini)
+
+# 🛠️ CORRECCIÓN: Evitamos que el cliente falle si la clave no se carga en local
+client = None
+if api_key_gemini:
+    client = genai.Client(api_key=api_key_gemini)
 
 @app.get("/")
 def inicio():
@@ -32,7 +36,7 @@ def buscar_leyes(q: str):
     if not q:
         raise HTTPException(status_code=400, detail="Debes proporcionar un término de búsqueda.")
     
-    # 1. Buscamos primero el fundamento legal en tu MySQL local
+    # 1. Buscamos primero el fundamento legal en tu MySQL
     leyes_encontradas = buscar_leyes_por_palabra(q)
     
     # Construimos el bloque de texto con lo que encontramos en tu base de datos
@@ -46,7 +50,7 @@ def buscar_leyes(q: str):
         return {
             "modo": "Local (MySQL)",
             "datos": leyes_encontradas,
-            "respuesta_ia": "Modo conversacional desactivado. Asegúrate de configurar la clave de Gemini."
+            "respuesta_ia": "Modo conversacional desactivado. Asegúrate de configurar la clave de Gemini en Render o tu .env."
         }
 
     # 3. ¡Activamos el cerebro de Gemini con instrucciones directas y sueltas!
